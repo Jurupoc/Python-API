@@ -3,7 +3,7 @@ from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 
 
-db_connect = create_engine(r'sqlite:///C:\Users\jurup\PycharmProjects\Python API\sqlite\db\pythonsqlite.db')
+db_connect = create_engine(r'sqlite:///.\sqlite\db\pythonsqlite.db')
 
 app = Flask(__name__)
 api = Api(app)
