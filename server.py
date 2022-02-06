@@ -18,17 +18,17 @@ class APIError(Exception):
 class UserDataError(APIError):
     """ Raises when nether the Email or Password are None"""
     code = 403
-    description = "User Data Error"
+    description = "<USER_DATA_ERROR>"
 
 
 @app.errorhandler(APIError)
 def handle_exception(err):
     """Return custom JSON when APIError or its children are raised"""
-    response = {"error": err.description, "message": ""}
+    response = {err.description:  ""}
     if len(err.args) > 0:
-        response["message"] = err.args[0]
+        response[err.description] = err.args[0]
     # Add some logging so that we can monitor different types of errors
-    app.logger.error(f"{err.description}: {response['message']}")
+    app.logger.error(f"{err.description}: {response[err.description]}")
     return jsonify(response), err.code
 
 
@@ -36,7 +36,7 @@ def handle_exception(err):
 def handle_exception(err):
     """Return JSON instead of HTML for any other server error"""
     app.logger.error(f"Unknown Exception: {str(err)}")
-    response = {"error": "Sorry, that error is on us, please contact support if this wasn't an accident"}
+    response = {"ERROR": "Sorry, that error is on us, please contact support if this wasn't an accident"}
     return jsonify(response), 500
 
 
@@ -60,7 +60,11 @@ def add_users():
         raise UserDataError('Email or Password can not be None')
 
     new_user = user.User(email, password)
-    db_connect.add(new_user)
+
+    if not db_connect.get_by_email(email):
+        db_connect.add(new_user)
+    else:
+        raise UserDataError('Email Already in Database')
 
     query = db_connect.get()
     for row in query:
