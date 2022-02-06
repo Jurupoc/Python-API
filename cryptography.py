@@ -2,7 +2,7 @@ import base64
 
 
 def encoder(password):
-    encoded_password = base64.b64encode(password.encode("urf-8"))
+    encoded_password = base64.b64encode(password.encode("utf-8"))
     return encoded_password
 
 
