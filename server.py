@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_restful import Api
+
 from model import user
 from DataBase import DB_sqlite as Db
 
