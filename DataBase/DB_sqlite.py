@@ -7,11 +7,9 @@ _USER = user.User
 
 
 class Database(object):
-    """sqlite3 database class that holds testers jobs"""
     DB_LOCATION = const.DB_PATH
 
     def __init__(self):
-        """Initialize db class variables"""
         self.engine = create_engine(Database.DB_LOCATION)
         self.connection = self.engine.connect()
 

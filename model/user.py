@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 import constant as const
+from cryptography import encoder
 
 Base = declarative_base()
 engine = create_engine(const.DB_PATH)
@@ -9,6 +10,10 @@ engine = create_engine(const.DB_PATH)
 
 def create_table():
     Base.metadata.create_all(engine)
+
+
+def _encoder_password(self, password):
+    return encoder(password)
 
 
 class User(Base):
@@ -20,12 +25,13 @@ class User(Base):
 
     def __init__(self, email, password):
         self.email = email
-        self.password = password
+        self.password = self._encoder_password(password)
 
     def __repr__(self):
-        return f'User: {self.email}'
+        return f'Email: {self.email}'
 
     def __str__(self):
         return f'Email: {self.email}'
+
 
 
