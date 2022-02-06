@@ -11,11 +11,6 @@ class DBError(Exception):
     pass
 
 
-class EmailAlreadyAdd(DBError):
-    """ Raises when the Email is already in the Database (at add() method) """
-    pass
-
-
 class DBConnectionError(DBError):
     """ Raises when is not possible to connect the database """
     pass
@@ -42,5 +37,7 @@ class Database(object):
             session.add(_user)
             session.commit()
 
-
-
+    def get_by_email(self, email):
+        with Session(self.engine) as session:
+            query = session.query(_USER).filter(_USER.email == email)
+            return query
